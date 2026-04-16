@@ -1,0 +1,11 @@
+# Platform Building Contract — service catalog (extend as components are added)
+version: 1
+platform: order-manager
+owner: guilherme-rauen
+components:
+  - id: contracts
+    type: library
+    description: AsyncAPI + JSON Schema source of truth; TypeScript + Python codegen
+    repositories:
+      - name: order-manager-contracts
+        visibility: private

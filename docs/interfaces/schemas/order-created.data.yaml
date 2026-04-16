@@ -1,0 +1,44 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+$id: OrderCreatedData
+description: Payload for com.ordermanager.order.created.v1
+type: object
+additionalProperties: false
+properties:
+  order_id:
+    type: string
+    pattern: ^ORD-[A-Z0-9]{8}$
+  customer_id:
+    type: string
+    format: uuid
+  items:
+    type: array
+    minItems: 1
+    items:
+      type: object
+      additionalProperties: false
+      properties:
+        product_id:
+          type: string
+        quantity:
+          type: integer
+          minimum: 1
+        unit_price:
+          type: number
+          minimum: 0
+      required:
+        - product_id
+        - quantity
+        - unit_price
+  total_amount:
+    type: number
+    minimum: 0
+  currency:
+    type: string
+    pattern: ^[A-Z]{3}$
+    default: EUR
+required:
+  - order_id
+  - customer_id
+  - items
+  - total_amount
+  - currency

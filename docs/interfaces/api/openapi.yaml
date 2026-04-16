@@ -1,0 +1,9 @@
+openapi: 3.1.0
+info:
+  title: Order Manager REST APIs
+  version: 0.0.0
+  description: >
+    Bundled OpenAPI for Order, Payment, and Shipment services. Split partials
+    live under per-service folders; Redocly bundles this root file in CI (next step).
+
+paths: {}

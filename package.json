@@ -1,0 +1,30 @@
+{
+  "name": "@guilherme-rauen/order-manager-contracts-root",
+  "private": true,
+  "description": "Order Manager — contracts (AsyncAPI, JSON Schema, codegen). Source of truth for the platform.",
+  "packageManager": "pnpm@10.33.0",
+  "engines": {
+    "node": "^24"
+  },
+  "scripts": {
+    "lint": "spectral lint docs/interfaces/events/asyncapi.yaml",
+    "bundle:asyncapi": "asyncapi bundle docs/interfaces/events/asyncapi.yaml -o docs/interfaces/events/final-asyncapi.yaml",
+    "generate": "pnpm generate:typescript && pnpm generate:python",
+    "generate:typescript": "tsx scripts/generate-typescript.ts",
+    "generate:python": "python3 scripts/generate-python.py",
+    "check:compat": "tsx scripts/check-compatibility.ts",
+    "build": "pnpm -C generated/typescript run build",
+    "check": "pnpm lint && pnpm generate:typescript && pnpm build",
+    "check:python": "bash scripts/verify-python.sh",
+    "check:full": "pnpm check && pnpm check:python"
+  },
+  "devDependencies": {
+    "@asyncapi/cli": "6.0.0",
+    "@stoplight/spectral-cli": "6.15.0",
+    "@types/node": "^25.6.0",
+    "json-schema-to-zod": "^2.8.1",
+    "tsx": "4.21.0",
+    "typescript": "5.9.3",
+    "yaml": "^2.8.3"
+  }
+}

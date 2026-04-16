@@ -1,0 +1,48 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+$id: Envelope
+description: CloudEvents v1.0 base envelope for all domain events
+type: object
+properties:
+  specversion:
+    type: string
+    const: '1.0'
+  id:
+    type: string
+    format: uuid
+  source:
+    type: string
+    description: URI identifying the event producer
+  type:
+    type: string
+    description: Event type (com.ordermanager.*)
+  time:
+    type: string
+    format: date-time
+  subject:
+    type: string
+    description: Aggregate identifier
+  datacontenttype:
+    type: string
+    const: application/json
+  data:
+    type: object
+  correlationid:
+    type: string
+    format: uuid
+  causationid:
+    type: string
+    format: uuid
+  aggregateversion:
+    type: integer
+    minimum: 1
+required:
+  - specversion
+  - id
+  - source
+  - type
+  - time
+  - subject
+  - datacontenttype
+  - data
+  - correlationid
+  - aggregateversion

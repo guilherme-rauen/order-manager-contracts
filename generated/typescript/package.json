@@ -1,0 +1,25 @@
+{
+  "name": "@guilherme-rauen/order-manager-contracts",
+  "version": "0.0.0",
+  "description": "Generated TypeScript types and validators for Order Manager (hand-maintained bootstrap until codegen is wired)",
+  "license": "MIT",
+  "type": "module",
+  "sideEffects": false,
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.json"
+  },
+  "engines": {
+    "node": "^24"
+  },
+  "devDependencies": {
+    "typescript": "5.9.3"
+  },
+  "dependencies": {
+    "zod": "^4.3.6"
+  }
+}

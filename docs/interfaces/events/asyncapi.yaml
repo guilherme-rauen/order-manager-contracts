@@ -1,0 +1,43 @@
+asyncapi: 3.1.0
+info:
+  title: Order Manager platform events
+  version: 0.1.0
+  description: >
+    NATS JetStream catalog. Streams and subjects will align with deployment;
+    this spec is the contract for message shapes and channel addresses.
+  contact:
+    name: Order Manager
+    url: https://github.com/guilherme-rauen/order-manager-contracts
+    email: contracts@example.com
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+  tags:
+    - name: orders
+      description: Order aggregate lifecycle
+
+defaultContentType: application/json
+
+servers:
+  development:
+    host: nats://localhost:4222
+    protocol: nats
+    description: Local NATS (JetStream enabled in real deployments)
+
+channels:
+  orderDomainEvents:
+    address: orders.events.>
+    description: Order aggregate domain events
+    messages:
+      orderCreated:
+        $ref: '#/components/messages/orderCreated'
+
+components:
+  messages:
+    orderCreated:
+      name: OrderCreated
+      title: Order created
+      summary: A new order was placed
+      contentType: application/json
+      payload:
+        $ref: ../schemas/order-created.yaml

@@ -1,0 +1,4 @@
+# Rules ship with @stoplight/spectral-cli (via @stoplight/spectral-rulesets).
+# Use the built-in AsyncAPI ruleset — no separate @asyncapi/ruleset package on npm.
+extends:
+  - spectral:asyncapi
