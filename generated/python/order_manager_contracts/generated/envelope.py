@@ -17,7 +17,12 @@ class Envelope(BaseModel):
     time: AwareDatetime
     subject: Annotated[str, Field(description='Aggregate identifier')]
     datacontenttype: Literal['application/json']
-    data: dict[str, Any]
+    data: Annotated[
+        dict[str, Any],
+        Field(
+            description='Event-specific payload. Kept loosely typed in the envelope; validated at consumption time by the event-specific Zod schema (TS) or Pydantic model (Python).'
+        ),
+    ]
     correlationid: UUID
     causationid: UUID | None = None
     aggregateversion: Annotated[int, Field(ge=1)]

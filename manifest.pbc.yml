@@ -1,11 +1,94 @@
-# Platform Building Contract — service catalog (extend as components are added)
+# Platform Building Contract — service catalog
 version: 1
 platform: order-manager
 owner: guilherme-rauen
+contact:
+  github: https://github.com/guilherme-rauen
+
 components:
   - id: contracts
     type: library
     description: AsyncAPI + JSON Schema source of truth; TypeScript + Python codegen
     repositories:
       - name: order-manager-contracts
-        visibility: private
+        visibility: public
+    dependencies: []
+
+  - id: toolkit-ts
+    type: library
+    description: Shared NestJS observability, config, bootstrap, health checks
+    repositories:
+      - name: order-manager-toolkit-ts
+        visibility: public
+    dependencies:
+      - contracts
+
+  - id: message-bus-ts
+    type: library
+    description: NATS JetStream client, CloudEvents, outbox, DLQ, idempotency
+    repositories:
+      - name: order-manager-message-bus-ts
+        visibility: public
+    dependencies:
+      - contracts
+      - toolkit-ts
+
+  - id: order-ts
+    type: service
+    description: Order Service — event sourcing, CQRS, saga orchestrator
+    repositories:
+      - name: order-manager-order-ts
+        visibility: public
+    dependencies:
+      - contracts
+      - toolkit-ts
+      - message-bus-ts
+
+  - id: payment-ts
+    type: service
+    description: Payment Service — webhooks, saga participant
+    repositories:
+      - name: order-manager-payment-ts
+        visibility: public
+    dependencies:
+      - contracts
+      - toolkit-ts
+      - message-bus-ts
+
+  - id: shipment-ts
+    type: service
+    description: Shipment Service — tracking, saga participant
+    repositories:
+      - name: order-manager-shipment-ts
+        visibility: public
+    dependencies:
+      - contracts
+      - toolkit-ts
+      - message-bus-ts
+
+  - id: gateway-ts
+    type: service
+    description: GraphQL BFF — Apollo Server 4, JWT auth, rate limiting, subscriptions
+    repositories:
+      - name: order-manager-gateway-ts
+        visibility: public
+    dependencies:
+      - contracts
+      - toolkit-ts
+
+  - id: frontend
+    type: frontend
+    description: Next.js 15 App Router dashboard
+    repositories:
+      - name: order-manager-frontend
+        visibility: public
+    dependencies:
+      - gateway-ts
+
+  - id: infra
+    type: infrastructure
+    description: Helm charts, ArgoCD, Docker Compose, ADRs, docs, load tests
+    repositories:
+      - name: order-manager-infra
+        visibility: public
+    dependencies: []

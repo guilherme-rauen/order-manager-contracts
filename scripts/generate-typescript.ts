@@ -9,7 +9,6 @@
 import { mkdir, readdir, readFile, writeFile } from 'node:fs/promises';
 import { basename, dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-
 import { jsonSchemaToZod } from 'json-schema-to-zod';
 import { parse as parseYaml } from 'yaml';
 

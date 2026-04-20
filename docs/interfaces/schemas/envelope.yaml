@@ -26,6 +26,10 @@ properties:
     const: application/json
   data:
     type: object
+    description: >-
+      Event-specific payload. Kept loosely typed in the envelope;
+      validated at consumption time by the event-specific Zod schema (TS)
+      or Pydantic model (Python).
   correlationid:
     type: string
     format: uuid
