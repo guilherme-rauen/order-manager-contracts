@@ -99,9 +99,12 @@ jobs:
           node-version-file: '.nvmrc'
           cache: pnpm
           registry-url: 'https://npm.pkg.github.com'
+          scope: '@guilherme-rauen'
       - run: pnpm install --frozen-lockfile
       - run: pnpm generate:typescript
       - run: pnpm build
-      - run: pnpm -C generated/typescript publish --no-git-checks
+      - name: Publish to GitHub Packages
+        working-directory: generated/typescript
+        run: npm publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
