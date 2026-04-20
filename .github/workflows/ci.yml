@@ -7,30 +7,115 @@ on:
     branches: [main]
 
 permissions:
-  contents: read
+  contents: write
+  packages: write
+  issues: write
+  pull-requests: write
+
+env:
+  NODE_VERSION: '24'
+  PNPM_VERSION: '10'
 
 jobs:
-  verify:
+  commitlint:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: wagoid/commitlint-github-action@v6
+
+  lint:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-
       - uses: pnpm/action-setup@v4
         with:
-          version: 10
-
+          version: ${{ env.PNPM_VERSION }}
       - uses: actions/setup-node@v4
         with:
           node-version-file: '.nvmrc'
           cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm lint
+      - run: pnpm format:check
 
+  generate-and-build:
+    runs-on: ubuntu-latest
+    needs: lint
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: ${{ env.PNPM_VERSION }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: '.nvmrc'
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm generate:typescript
+      - name: Codegen drift check (generated code must be committed)
+        run: |
+          git diff --exit-code -- generated/ || \
+            (echo "::error::Generated files out of date. Run 'pnpm generate' and commit." && exit 1)
+      - run: pnpm build
+
+  verify-python:
+    runs-on: ubuntu-latest
+    needs: lint
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: ${{ env.PNPM_VERSION }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: '.nvmrc'
+          cache: pnpm
       - uses: actions/setup-python@v5
         with:
           python-version-file: '.python-version'
-          cache: pip
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm check:python
 
-      - name: Install (Node)
-        run: pnpm install --frozen-lockfile
+  security:
+    runs-on: ubuntu-latest
+    needs: lint
+    steps:
+      - uses: actions/checkout@v4
+      - uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - uses: pnpm/action-setup@v4
+        with:
+          version: ${{ env.PNPM_VERSION }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: '.nvmrc'
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm audit --audit-level=high
 
-      - name: Verify (TS + Python)
-        run: pnpm check:full
+  publish:
+    runs-on: ubuntu-latest
+    needs: [generate-and-build, verify-python, security]
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: pnpm/action-setup@v4
+        with:
+          version: ${{ env.PNPM_VERSION }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: '.nvmrc'
+          cache: pnpm
+          registry-url: 'https://npm.pkg.github.com'
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm generate:typescript
+      - run: pnpm build
+      - run: pnpm -C generated/typescript publish --no-git-checks
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

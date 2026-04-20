@@ -11,7 +11,8 @@
     "dist"
   ],
   "scripts": {
-    "build": "tsc -p tsconfig.json"
+    "build": "tsc -p tsconfig.json",
+    "prepack": "pnpm --filter @guilherme-rauen/order-manager-contracts-root generate:typescript && tsc -p tsconfig.json && git diff --exit-code -- src/generated/"
   },
   "engines": {
     "node": "^24"

@@ -10,14 +10,14 @@
 
 ## Toolchain versions (pinned together)
 
-| Tool | Version | Notes |
-|------|---------|--------|
-| pnpm | 10.33.0 | `packageManager` in root `package.json` |
-| `@asyncapi/cli` | 6.0.0 | Latest on npm; internally aligns with Spectral **6.15.0** |
-| `@stoplight/spectral-cli` | **6.15.0** | Matches the dependency `@asyncapi/cli@6.0.0` uses — avoids duplicate Spectral copies |
-| `tsx` | 4.21.0 | Run TS scripts |
-| TypeScript | **5.9.3** | Latest **5.x** stable; shared by root scripts and `generated/typescript` |
-| Python | ≥3.13 (matches `.python-version`) | `generated/python/pyproject.toml` |
+| Tool                      | Version                           | Notes                                                                                |
+| ------------------------- | --------------------------------- | ------------------------------------------------------------------------------------ |
+| pnpm                      | 10.33.0                           | `packageManager` in root `package.json`                                              |
+| `@asyncapi/cli`           | 6.0.0                             | Latest on npm; internally aligns with Spectral **6.15.0**                            |
+| `@stoplight/spectral-cli` | **6.15.0**                        | Matches the dependency `@asyncapi/cli@6.0.0` uses — avoids duplicate Spectral copies |
+| `tsx`                     | 4.21.0                            | Run TS scripts                                                                       |
+| TypeScript                | **5.9.3**                         | Latest **5.x** stable; shared by root scripts and `generated/typescript`             |
+| Python                    | ≥3.13 (matches `.python-version`) | `generated/python/pyproject.toml`                                                    |
 
 There is **no** `@asyncapi/ruleset` package on npm. Spectral loads **`spectral:asyncapi`** from `@stoplight/spectral-rulesets` (bundled with `spectral-cli`).
 

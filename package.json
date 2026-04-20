@@ -7,7 +7,9 @@
     "node": "^24"
   },
   "scripts": {
-    "lint": "spectral lint docs/interfaces/events/asyncapi.yaml",
+    "lint": "eslint scripts/ && spectral lint docs/interfaces/events/asyncapi.yaml",
+    "format:check": "prettier --check .",
+    "format": "prettier --write .",
     "bundle:asyncapi": "asyncapi bundle docs/interfaces/events/asyncapi.yaml -o docs/interfaces/events/final-asyncapi.yaml",
     "generate": "pnpm generate:typescript && pnpm generate:python",
     "generate:typescript": "tsx scripts/generate-typescript.ts",
@@ -16,15 +18,36 @@
     "build": "pnpm -C generated/typescript run build",
     "check": "pnpm lint && pnpm generate:typescript && pnpm build",
     "check:python": "bash scripts/verify-python.sh",
-    "check:full": "pnpm check && pnpm check:python"
+    "check:full": "pnpm check && pnpm check:python",
+    "prepare": "husky"
   },
   "devDependencies": {
-    "@asyncapi/cli": "6.0.0",
-    "@stoplight/spectral-cli": "6.15.0",
-    "@types/node": "^25.6.0",
+    "@asyncapi/cli": "^6.0.0",
+    "@commitlint/cli": "^19.8.0",
+    "@commitlint/config-conventional": "^19.8.0",
+    "@eslint/js": "^9.28.0",
+    "@stoplight/spectral-cli": "^6.15.0",
+    "@types/node": "^24.12.2",
+    "eslint": "^9.28.0",
+    "husky": "^9.1.0",
     "json-schema-to-zod": "^2.8.1",
-    "tsx": "4.21.0",
-    "typescript": "5.9.3",
+    "prettier": "^3.5.0",
+    "tsx": "^4.21.0",
+    "typescript": "^5.9.3",
+    "typescript-eslint": "^8.33.0",
     "yaml": "^2.8.3"
+  },
+  "pnpm": {
+    "overrides": {
+      "@babel/core": "^7.28.0",
+      "jsonpath-plus": "10.3.0",
+      "glob": "^10.4.5",
+      "rimraf": "^5.0.10",
+      "resolve": "1.22.11",
+      "lodash": "^4.18.0",
+      "tar": "^7.5.11",
+      "next": "^15.5.15",
+      "@tootallnate/once": "^3.0.1"
+    }
   }
 }

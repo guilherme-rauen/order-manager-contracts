@@ -16,6 +16,12 @@ python -m pip install -q -e ".[dev]"
 cd "${ROOT}"
 python scripts/generate-python.py
 
+# Codegen drift check — generated Python files must be committed
+git diff --exit-code -- generated/python/order_manager_contracts/generated/ || {
+  echo "::error::Python generated files out of date. Run 'pnpm generate:python' and commit." >&2
+  exit 1
+}
+
 cd "${PY}"
 python -m ruff check order_manager_contracts
 python -m mypy order_manager_contracts

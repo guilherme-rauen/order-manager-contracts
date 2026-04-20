@@ -1,0 +1,5 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+$id: CustomerId
+description: Branded customer identifier
+type: string
+format: uuid
