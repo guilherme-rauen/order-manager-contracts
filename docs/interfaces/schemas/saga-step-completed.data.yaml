@@ -1,0 +1,29 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+$id: SagaStepCompletedData
+description: Payload for com.ordermanager.saga.step.completed.v1
+type: object
+additionalProperties: false
+properties:
+  saga_id:
+    $ref: ./primitives/correlation-id.yaml
+  step:
+    type: string
+    enum:
+      - PAYMENT_REQUESTED
+      - PAYMENT_CONFIRMED
+      - SHIPMENT_REQUESTED
+      - SHIPMENT_DISPATCHED
+      - SHIPMENT_DELIVERED
+  previous_state:
+    type: string
+  new_state:
+    type: string
+  completed_at:
+    type: string
+    format: date-time
+required:
+  - saga_id
+  - step
+  - previous_state
+  - new_state
+  - completed_at

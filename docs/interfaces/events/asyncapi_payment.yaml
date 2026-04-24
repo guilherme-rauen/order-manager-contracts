@@ -1,0 +1,52 @@
+channels:
+  paymentDomainEvents:
+    address: payments.events.>
+    description: Payment domain events (stream PAYMENT_EVENTS)
+    messages:
+      paymentConfirmed:
+        $ref: '#/components/messages/paymentConfirmed'
+      paymentFailed:
+        $ref: '#/components/messages/paymentFailed'
+      paymentRefunded:
+        $ref: '#/components/messages/paymentRefunded'
+
+  paymentCommands:
+    address: payments.commands.>
+    description: Commands into Payment Service
+    messages:
+      paymentRequested:
+        $ref: '#/components/messages/paymentRequested'
+
+components:
+  messages:
+    paymentRequested:
+      name: PaymentRequested
+      title: Payment requested
+      summary: Saga requests payment processing for an order
+      contentType: application/json
+      payload:
+        $ref: ../schemas/payment-requested.yaml
+
+    paymentConfirmed:
+      name: PaymentConfirmed
+      title: Payment confirmed
+      summary: Payment successfully processed by PSP
+      contentType: application/json
+      payload:
+        $ref: ../schemas/payment-confirmed.yaml
+
+    paymentFailed:
+      name: PaymentFailed
+      title: Payment failed
+      summary: Payment rejected by PSP
+      contentType: application/json
+      payload:
+        $ref: ../schemas/payment-failed.yaml
+
+    paymentRefunded:
+      name: PaymentRefunded
+      title: Payment refunded
+      summary: Payment refunded as saga compensation
+      contentType: application/json
+      payload:
+        $ref: ../schemas/payment-refunded.yaml

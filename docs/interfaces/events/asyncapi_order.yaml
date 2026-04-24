@@ -1,0 +1,61 @@
+channels:
+  orderDomainEvents:
+    address: orders.events.>
+    description: Order aggregate domain events (stream ORDER_EVENTS)
+    messages:
+      orderCreated:
+        $ref: '#/components/messages/orderCreated'
+      orderConfirmed:
+        $ref: '#/components/messages/orderConfirmed'
+      orderCancelled:
+        $ref: '#/components/messages/orderCancelled'
+      orderShipped:
+        $ref: '#/components/messages/orderShipped'
+      orderDelivered:
+        $ref: '#/components/messages/orderDelivered'
+
+  orderCommands:
+    address: orders.commands.>
+    description: Commands into Order Service
+
+components:
+  messages:
+    orderCreated:
+      name: OrderCreated
+      title: Order created
+      summary: A new order was placed
+      contentType: application/json
+      payload:
+        $ref: ../schemas/order-created.yaml
+
+    orderConfirmed:
+      name: OrderConfirmed
+      title: Order confirmed
+      summary: Payment confirmed and order status updated
+      contentType: application/json
+      payload:
+        $ref: ../schemas/order-confirmed.yaml
+
+    orderCancelled:
+      name: OrderCancelled
+      title: Order cancelled
+      summary: Order was cancelled (payment failure, customer request, shipment failure, or timeout)
+      contentType: application/json
+      payload:
+        $ref: ../schemas/order-cancelled.yaml
+
+    orderShipped:
+      name: OrderShipped
+      title: Order shipped
+      summary: Order dispatched by carrier
+      contentType: application/json
+      payload:
+        $ref: ../schemas/order-shipped.yaml
+
+    orderDelivered:
+      name: OrderDelivered
+      title: Order delivered
+      summary: Order delivered to customer
+      contentType: application/json
+      payload:
+        $ref: ../schemas/order-delivered.yaml

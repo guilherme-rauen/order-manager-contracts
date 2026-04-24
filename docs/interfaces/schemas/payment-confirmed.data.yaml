@@ -1,0 +1,29 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+$id: PaymentConfirmedData
+description: Payload for com.ordermanager.payment.confirmed.v1
+type: object
+additionalProperties: false
+properties:
+  payment_id:
+    $ref: ./primitives/payment-id.yaml
+  order_id:
+    $ref: ./primitives/order-id.yaml
+  amount:
+    type: number
+    minimum: 0
+  currency:
+    type: string
+    pattern: ^[A-Z]{3}$
+  provider_transaction_id:
+    type: string
+    description: External payment service provider reference
+  confirmed_at:
+    type: string
+    format: date-time
+required:
+  - payment_id
+  - order_id
+  - amount
+  - currency
+  - provider_transaction_id
+  - confirmed_at

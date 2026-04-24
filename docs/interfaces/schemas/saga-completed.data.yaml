@@ -1,0 +1,27 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+$id: SagaCompletedData
+description: Payload for com.ordermanager.saga.completed.v1
+type: object
+additionalProperties: false
+properties:
+  saga_id:
+    $ref: ./primitives/correlation-id.yaml
+  order_id:
+    $ref: ./primitives/order-id.yaml
+  final_state:
+    type: string
+    enum:
+      - COMPLETED_DELIVERED
+      - COMPLETED_CANCELLED
+  completed_at:
+    type: string
+    format: date-time
+  duration_ms:
+    type: integer
+    minimum: 0
+required:
+  - saga_id
+  - order_id
+  - final_state
+  - completed_at
+  - duration_ms

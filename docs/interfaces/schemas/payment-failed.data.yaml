@@ -1,0 +1,33 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+$id: PaymentFailedData
+description: Payload for com.ordermanager.payment.failed.v1
+type: object
+additionalProperties: false
+properties:
+  payment_id:
+    $ref: ./primitives/payment-id.yaml
+  order_id:
+    $ref: ./primitives/order-id.yaml
+  amount:
+    type: number
+    minimum: 0
+  currency:
+    type: string
+    pattern: ^[A-Z]{3}$
+  failure_reason:
+    type: string
+    enum:
+      - INSUFFICIENT_FUNDS
+      - CARD_DECLINED
+      - PROVIDER_ERROR
+      - TIMEOUT
+  failed_at:
+    type: string
+    format: date-time
+required:
+  - payment_id
+  - order_id
+  - amount
+  - currency
+  - failure_reason
+  - failed_at

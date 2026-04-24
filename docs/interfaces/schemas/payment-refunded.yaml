@@ -1,0 +1,14 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+$id: PaymentRefunded
+description: Payment refunded domain event (full message including CloudEvents envelope)
+allOf:
+  - $ref: ./envelope.yaml
+  - type: object
+    properties:
+      type:
+        const: com.ordermanager.payment.refunded.v1
+      data:
+        $ref: ./payment-refunded.data.yaml
+    required:
+      - type
+      - data

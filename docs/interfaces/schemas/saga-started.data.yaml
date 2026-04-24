@@ -1,0 +1,25 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+$id: SagaStartedData
+description: Payload for com.ordermanager.saga.started.v1
+type: object
+additionalProperties: false
+properties:
+  saga_id:
+    $ref: ./primitives/correlation-id.yaml
+  saga_type:
+    type: string
+    const: ORDER_LIFECYCLE
+  order_id:
+    $ref: ./primitives/order-id.yaml
+  initial_state:
+    type: string
+    const: AWAITING_PAYMENT
+  started_at:
+    type: string
+    format: date-time
+required:
+  - saga_id
+  - saga_type
+  - order_id
+  - initial_state
+  - started_at

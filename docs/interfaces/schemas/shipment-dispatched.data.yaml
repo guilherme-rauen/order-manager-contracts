@@ -1,0 +1,32 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+$id: ShipmentDispatchedData
+description: Payload for com.ordermanager.shipment.dispatched.v1
+type: object
+additionalProperties: false
+properties:
+  shipment_id:
+    $ref: ./primitives/shipment-id.yaml
+  order_id:
+    $ref: ./primitives/order-id.yaml
+  carrier:
+    type: string
+    enum:
+      - DHL
+      - UPS
+      - FEDEX
+      - DPD
+  tracking_code:
+    type: string
+  estimated_delivery:
+    type: string
+    format: date-time
+  dispatched_at:
+    type: string
+    format: date-time
+required:
+  - shipment_id
+  - order_id
+  - carrier
+  - tracking_code
+  - estimated_delivery
+  - dispatched_at

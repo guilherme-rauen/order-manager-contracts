@@ -1,0 +1,14 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+$id: OrderShipped
+description: Order shipped domain event (full message including CloudEvents envelope)
+allOf:
+  - $ref: ./envelope.yaml
+  - type: object
+    properties:
+      type:
+        const: com.ordermanager.order.shipped.v1
+      data:
+        $ref: ./order-shipped.data.yaml
+    required:
+      - type
+      - data

@@ -1,0 +1,52 @@
+channels:
+  shipmentDomainEvents:
+    address: shipments.events.>
+    description: Shipment domain events (stream SHIPMENT_EVENTS)
+    messages:
+      shipmentDispatched:
+        $ref: '#/components/messages/shipmentDispatched'
+      shipmentDelivered:
+        $ref: '#/components/messages/shipmentDelivered'
+      shipmentFailed:
+        $ref: '#/components/messages/shipmentFailed'
+
+  shipmentCommands:
+    address: shipments.commands.>
+    description: Commands into Shipment Service
+    messages:
+      shipmentRequested:
+        $ref: '#/components/messages/shipmentRequested'
+
+components:
+  messages:
+    shipmentRequested:
+      name: ShipmentRequested
+      title: Shipment requested
+      summary: Saga requests shipment for a confirmed order
+      contentType: application/json
+      payload:
+        $ref: ../schemas/shipment-requested.yaml
+
+    shipmentDispatched:
+      name: ShipmentDispatched
+      title: Shipment dispatched
+      summary: Carrier picked up and dispatched the shipment
+      contentType: application/json
+      payload:
+        $ref: ../schemas/shipment-dispatched.yaml
+
+    shipmentDelivered:
+      name: ShipmentDelivered
+      title: Shipment delivered
+      summary: Shipment delivered to customer
+      contentType: application/json
+      payload:
+        $ref: ../schemas/shipment-delivered.yaml
+
+    shipmentFailed:
+      name: ShipmentFailed
+      title: Shipment failed
+      summary: Shipment could not be completed
+      contentType: application/json
+      payload:
+        $ref: ../schemas/shipment-failed.yaml

@@ -1,6 +1,9 @@
 #!/usr/bin/env python3
 """JSON Schema (YAML) → Pydantic v2 models via datamodel-code-generator.
 
+Resolves $ref across YAML files before generation, so primitives are
+inlined from their canonical source (single source of truth).
+
 Processes:
 - docs/interfaces/schemas/*.data.yaml → event data models
 - docs/interfaces/schemas/primitives/*.yaml → primitive type models
@@ -9,9 +12,11 @@ Processes:
 
 from __future__ import annotations
 
+import json
 import os
 import subprocess
 import sys
+import tempfile
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -38,36 +43,83 @@ def to_snake(kebab: str) -> str:
     return kebab.replace("-", "_")
 
 
+def resolve_refs(schema_path: Path) -> dict:
+    """Recursively resolve $ref pointers in a YAML schema to produce a self-contained dict."""
+    import yaml  # type: ignore[import-untyped]
+
+    with schema_path.open() as f:
+        schema = yaml.safe_load(f)
+
+    def _resolve(obj: object, base_dir: Path) -> object:
+        if isinstance(obj, dict):
+            if "$ref" in obj:
+                ref_path = base_dir / obj["$ref"]
+                with ref_path.open() as rf:
+                    resolved = yaml.safe_load(rf)
+                # Remove meta keys from inlined ref
+                resolved.pop("$schema", None)
+                resolved.pop("$id", None)
+                return _resolve(resolved, ref_path.parent)
+            return {k: _resolve(v, base_dir) for k, v in obj.items()}
+        if isinstance(obj, list):
+            return [_resolve(item, base_dir) for item in obj]
+        return obj
+
+    resolved = _resolve(schema, schema_path.parent)
+    if isinstance(resolved, dict):
+        return resolved
+    msg = f"Schema at {schema_path} did not resolve to a dict"
+    raise TypeError(msg)
+
+
 def generate_model(
     py: Path,
     schema_path: Path,
     out_file: Path,
     class_name: str,
 ) -> None:
-    cmd = [
-        str(py),
-        "-m",
-        "datamodel_code_generator",
-        "--input",
-        str(schema_path),
-        "--input-file-type",
-        "jsonschema",
-        "--output",
-        str(out_file),
-        "--output-model-type",
-        "pydantic_v2.BaseModel",
-        "--snake-case-field",
-        "--use-annotated",
-        "--use-standard-collections",
-        "--target-python-version",
-        "3.13",
-        "--disable-timestamp",
-        "--class-name",
-        class_name,
-    ]
-    print("[generate:python]", " ".join(cmd))
-    subprocess.check_call(cmd, cwd=str(ROOT))
-    print(f"[generate:python] wrote {out_file}")
+    # Resolve $ref and write a temporary self-contained JSON file
+    resolved = resolve_refs(schema_path)
+    resolved.pop("$schema", None)
+    resolved.pop("$id", None)
+
+    with tempfile.NamedTemporaryFile(
+        mode="w", suffix=".json", delete=False,
+    ) as tmp:
+        json.dump(resolved, tmp)
+        tmp_path = tmp.name
+
+    try:
+        header = f"# Auto-generated from {schema_path.name} — do not edit."
+        cmd = [
+            str(py),
+            "-m",
+            "datamodel_code_generator",
+            "--input",
+            tmp_path,
+            "--input-file-type",
+            "jsonschema",
+            "--output",
+            str(out_file),
+            "--output-model-type",
+            "pydantic_v2.BaseModel",
+            "--snake-case-field",
+            "--use-annotated",
+            "--use-standard-collections",
+            "--target-python-version",
+            "3.13",
+            "--disable-timestamp",
+            "--custom-file-header",
+            header,
+            "--use-title-as-name",
+            "--class-name",
+            class_name,
+        ]
+        print("[generate:python]", " ".join(cmd))
+        subprocess.check_call(cmd, cwd=str(ROOT))
+        print(f"[generate:python] wrote {out_file}")
+    finally:
+        Path(tmp_path).unlink(missing_ok=True)
 
 
 def main() -> None:

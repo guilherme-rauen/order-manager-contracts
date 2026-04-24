@@ -1,16 +1,19 @@
 /**
  * JSON Schema (YAML) → Zod + inferred types for generated/typescript/src/generated/.
  *
+ * Resolves $ref across YAML files before handing to json-schema-to-zod,
+ * so primitives are inlined from their canonical source (single source of truth).
+ *
  * Processes:
  * - docs/interfaces/schemas/*.data.yaml → event data Zod schemas
  * - docs/interfaces/schemas/primitives/*.yaml → primitive Zod schemas
  * - docs/interfaces/schemas/envelope.yaml → CloudEvents envelope Zod schema
  */
-import { mkdir, readdir, readFile, writeFile } from 'node:fs/promises';
+import { mkdir, readdir, writeFile } from 'node:fs/promises';
 import { basename, dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import $RefParser from '@apidevtools/json-schema-ref-parser';
 import { jsonSchemaToZod } from 'json-schema-to-zod';
-import { parse as parseYaml } from 'yaml';
 
 const SCRIPT_DIR = dirname(fileURLToPath(import.meta.url));
 const REPO_ROOT = join(SCRIPT_DIR, '..');
@@ -34,12 +37,14 @@ const generateFromSchema = async (
   schemaName: string,
   typeName: string,
 ): Promise<void> => {
-  const raw = await readFile(schemaPath, 'utf-8');
-  const parsed: unknown = parseYaml(raw);
-  if (typeof parsed !== 'object' || parsed === null) {
-    throw new Error(`Schema at ${schemaPath} must parse to an object`);
-  }
-  const schema = parsed as Record<string, unknown>;
+  // Resolve all $ref pointers into a single dereferenced schema
+  const dereferenced = await $RefParser.dereference(schemaPath);
+  // Cast needed: $RefParser returns JSONSchema but json-schema-to-zod expects Record<string, unknown>
+  const schema: Record<string, unknown> = dereferenced as Record<string, unknown>;
+
+  // Remove $schema and $id — json-schema-to-zod doesn't need them and they can confuse it
+  delete schema['$schema'];
+  delete schema['$id'];
 
   const body = jsonSchemaToZod(schema, {
     module: 'esm',

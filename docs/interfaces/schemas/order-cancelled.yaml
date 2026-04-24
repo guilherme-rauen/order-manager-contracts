@@ -1,0 +1,14 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+$id: OrderCancelled
+description: Order cancelled domain event (full message including CloudEvents envelope)
+allOf:
+  - $ref: ./envelope.yaml
+  - type: object
+    properties:
+      type:
+        const: com.ordermanager.order.cancelled.v1
+      data:
+        $ref: ./order-cancelled.data.yaml
+    required:
+      - type
+      - data

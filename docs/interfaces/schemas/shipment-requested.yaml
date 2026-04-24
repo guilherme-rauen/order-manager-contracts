@@ -1,0 +1,14 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+$id: ShipmentRequested
+description: Shipment requested domain event (full message including CloudEvents envelope)
+allOf:
+  - $ref: ./envelope.yaml
+  - type: object
+    properties:
+      type:
+        const: com.ordermanager.shipment.requested.v1
+      data:
+        $ref: ./shipment-requested.data.yaml
+    required:
+      - type
+      - data

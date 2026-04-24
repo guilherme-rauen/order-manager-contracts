@@ -1,0 +1,26 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+$id: SagaStepFailedData
+description: Payload for com.ordermanager.saga.step.failed.v1
+type: object
+additionalProperties: false
+properties:
+  saga_id:
+    $ref: ./primitives/correlation-id.yaml
+  step:
+    type: string
+  previous_state:
+    type: string
+  new_state:
+    type: string
+  failure_reason:
+    type: string
+  failed_at:
+    type: string
+    format: date-time
+required:
+  - saga_id
+  - step
+  - previous_state
+  - new_state
+  - failure_reason
+  - failed_at

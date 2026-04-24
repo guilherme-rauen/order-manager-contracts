@@ -14,7 +14,8 @@ properties:
     description: URI identifying the event producer
   type:
     type: string
-    description: Event type (com.ordermanager.*)
+    pattern: ^com\.ordermanager\.[a-z]+\.[a-z]+\.v\d+$
+    description: Event type — com.ordermanager.{domain}.{event}.v{n}
   time:
     type: string
     format: date-time

@@ -1,0 +1,25 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+$id: ShipmentFailedData
+description: Payload for com.ordermanager.shipment.failed.v1
+type: object
+additionalProperties: false
+properties:
+  shipment_id:
+    $ref: ./primitives/shipment-id.yaml
+  order_id:
+    $ref: ./primitives/order-id.yaml
+  failure_reason:
+    type: string
+    enum:
+      - ADDRESS_INVALID
+      - CARRIER_ERROR
+      - CUSTOMS_HOLD
+      - LOST
+  failed_at:
+    type: string
+    format: date-time
+required:
+  - shipment_id
+  - order_id
+  - failure_reason
+  - failed_at

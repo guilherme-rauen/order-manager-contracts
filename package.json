@@ -7,21 +7,23 @@
     "node": "^24"
   },
   "scripts": {
-    "lint": "eslint scripts/ && spectral lint docs/interfaces/events/asyncapi.yaml",
-    "format:check": "prettier --check .",
-    "format": "prettier --write .",
-    "bundle:asyncapi": "asyncapi bundle docs/interfaces/events/asyncapi.yaml -o docs/interfaces/events/final-asyncapi.yaml",
-    "generate": "pnpm generate:typescript && pnpm generate:python",
-    "generate:typescript": "tsx scripts/generate-typescript.ts",
-    "generate:python": "python3 scripts/generate-python.py",
-    "check:compat": "tsx scripts/check-compatibility.ts",
     "build": "pnpm -C generated/typescript run build",
+    "bundle:asyncapi": "asyncapi bundle docs/interfaces/events/asyncapi.yaml -o docs/interfaces/events/final-asyncapi.yaml",
     "check": "pnpm lint && pnpm generate:typescript && pnpm build",
+    "check:audit": "pnpm audit --audit-level=high",
+    "check:compat": "tsx scripts/check-compatibility.ts",
+    "check:full": "pnpm check && pnpm check:python && pnpm check:audit",
     "check:python": "bash scripts/verify-python.sh",
-    "check:full": "pnpm check && pnpm check:python",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "generate": "pnpm generate:typescript && pnpm generate:python",
+    "generate:python": "python3 scripts/generate-python.py",
+    "generate:typescript": "tsx scripts/generate-typescript.ts",
+    "lint": "eslint scripts/ && pnpm bundle:asyncapi && spectral lint docs/interfaces/events/final-asyncapi.yaml",
     "prepare": "husky"
   },
   "devDependencies": {
+    "@apidevtools/json-schema-ref-parser": "^15.3.5",
     "@asyncapi/cli": "^6.0.0",
     "@commitlint/cli": "^19.8.0",
     "@commitlint/config-conventional": "^19.8.0",
@@ -41,14 +43,16 @@
   "pnpm": {
     "overrides": {
       "@babel/core": "^7.28.0",
-      "jsonpath-plus": "10.3.0",
+      "@tootallnate/once": "^3.0.1",
+      "fast-xml-parser": "^5.7.0",
       "glob": "^10.4.5",
-      "rimraf": "^5.0.10",
-      "resolve": "1.22.11",
+      "jsonpath-plus": "10.3.0",
       "lodash": "^4.18.0",
-      "tar": "^7.5.11",
       "next": "^15.5.15",
-      "@tootallnate/once": "^3.0.1"
+      "resolve": "1.22.11",
+      "rimraf": "^5.0.10",
+      "tar": "^7.5.11",
+      "uuid": "^14.0.0"
     }
   }
 }

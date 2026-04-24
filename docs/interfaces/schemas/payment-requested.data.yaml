@@ -1,0 +1,24 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+$id: PaymentRequestedData
+description: Payload for com.ordermanager.payment.requested.v1
+type: object
+additionalProperties: false
+properties:
+  payment_id:
+    $ref: ./primitives/payment-id.yaml
+  order_id:
+    $ref: ./primitives/order-id.yaml
+  amount:
+    type: number
+    minimum: 0
+  currency:
+    type: string
+    pattern: ^[A-Z]{3}$
+  customer_id:
+    $ref: ./primitives/customer-id.yaml
+required:
+  - payment_id
+  - order_id
+  - amount
+  - currency
+  - customer_id

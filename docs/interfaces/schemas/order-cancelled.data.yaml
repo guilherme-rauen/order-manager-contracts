@@ -1,0 +1,28 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+$id: OrderCancelledData
+description: Payload for com.ordermanager.order.cancelled.v1
+type: object
+additionalProperties: false
+properties:
+  order_id:
+    $ref: ./primitives/order-id.yaml
+  reason:
+    type: string
+    enum:
+      - PAYMENT_FAILED
+      - CUSTOMER_REQUEST
+      - SHIPMENT_FAILED
+      - TIMEOUT
+  cancelled_at:
+    type: string
+    format: date-time
+  cancelled_by:
+    type: string
+    enum:
+      - SYSTEM
+      - CUSTOMER
+required:
+  - order_id
+  - reason
+  - cancelled_at
+  - cancelled_by

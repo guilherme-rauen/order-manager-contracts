@@ -1,0 +1,19 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+$id: ShipmentDeliveredData
+description: Payload for com.ordermanager.shipment.delivered.v1
+type: object
+additionalProperties: false
+properties:
+  shipment_id:
+    $ref: ./primitives/shipment-id.yaml
+  order_id:
+    $ref: ./primitives/order-id.yaml
+  delivered_at:
+    type: string
+    format: date-time
+  signed_by:
+    type: string
+required:
+  - shipment_id
+  - order_id
+  - delivered_at

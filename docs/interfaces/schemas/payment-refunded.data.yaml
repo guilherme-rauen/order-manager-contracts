@@ -1,0 +1,28 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+$id: PaymentRefundedData
+description: Payload for com.ordermanager.payment.refunded.v1
+type: object
+additionalProperties: false
+properties:
+  payment_id:
+    $ref: ./primitives/payment-id.yaml
+  order_id:
+    $ref: ./primitives/order-id.yaml
+  refund_amount:
+    type: number
+    minimum: 0
+  currency:
+    type: string
+    pattern: ^[A-Z]{3}$
+  reason:
+    type: string
+  refunded_at:
+    type: string
+    format: date-time
+required:
+  - payment_id
+  - order_id
+  - refund_amount
+  - currency
+  - reason
+  - refunded_at

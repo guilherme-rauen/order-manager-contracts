@@ -1,0 +1,14 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+$id: SagaCompleted
+description: Saga completed domain event (full message including CloudEvents envelope)
+allOf:
+  - $ref: ./envelope.yaml
+  - type: object
+    properties:
+      type:
+        const: com.ordermanager.saga.completed.v1
+      data:
+        $ref: ./saga-completed.data.yaml
+    required:
+      - type
+      - data

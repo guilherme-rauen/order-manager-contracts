@@ -1,0 +1,14 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+$id: OrderConfirmed
+description: Order confirmed domain event (full message including CloudEvents envelope)
+allOf:
+  - $ref: ./envelope.yaml
+  - type: object
+    properties:
+      type:
+        const: com.ordermanager.order.confirmed.v1
+      data:
+        $ref: ./order-confirmed.data.yaml
+    required:
+      - type
+      - data

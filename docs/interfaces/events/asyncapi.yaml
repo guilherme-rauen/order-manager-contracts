@@ -3,18 +3,25 @@ info:
   title: Order Manager platform events
   version: 0.1.0
   description: >
-    NATS JetStream catalog. Streams and subjects will align with deployment;
-    this spec is the contract for message shapes and channel addresses.
+    NATS JetStream catalog for the Order Manager platform.
+    Per-service channel definitions are in separate files and bundled
+    into final-asyncapi.yaml via @asyncapi/cli.
   contact:
-    name: Order Manager
+    name: Guilherme Rauen
     url: https://github.com/guilherme-rauen/order-manager-contracts
-    email: contracts@example.com
+    email: contracts@ordermanager.dev
   license:
-    name: MIT
-    url: https://opensource.org/licenses/MIT
+    name: UNLICENSED
+    url: https://github.com/guilherme-rauen/order-manager-contracts/blob/main/LICENSE
   tags:
     - name: orders
       description: Order aggregate lifecycle
+    - name: payments
+      description: Payment processing
+    - name: shipments
+      description: Shipment tracking
+    - name: sagas
+      description: Saga orchestration
 
 defaultContentType: application/json
 
@@ -22,22 +29,28 @@ servers:
   development:
     host: nats://localhost:4222
     protocol: nats
-    description: Local NATS (JetStream enabled in real deployments)
+    description: Local NATS (JetStream enabled)
 
 channels:
+  # --- Order domain ---
   orderDomainEvents:
-    address: orders.events.>
-    description: Order aggregate domain events
-    messages:
-      orderCreated:
-        $ref: '#/components/messages/orderCreated'
+    $ref: './asyncapi_order.yaml#/channels/orderDomainEvents'
+  orderCommands:
+    $ref: './asyncapi_order.yaml#/channels/orderCommands'
 
-components:
-  messages:
-    orderCreated:
-      name: OrderCreated
-      title: Order created
-      summary: A new order was placed
-      contentType: application/json
-      payload:
-        $ref: ../schemas/order-created.yaml
+  # --- Payment domain ---
+  paymentDomainEvents:
+    $ref: './asyncapi_payment.yaml#/channels/paymentDomainEvents'
+  paymentCommands:
+    $ref: './asyncapi_payment.yaml#/channels/paymentCommands'
+
+  # --- Shipment domain ---
+  shipmentDomainEvents:
+    $ref: './asyncapi_shipment.yaml#/channels/shipmentDomainEvents'
+  shipmentCommands:
+    $ref: './asyncapi_shipment.yaml#/channels/shipmentCommands'
+
+  # --- Dead letter ---
+  deadLetter:
+    address: dlq.>
+    description: Dead letter queue for failed event processing

@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "order-manager-contracts"
-version = "0.0.0"
+version = "0.1.0"
 description = "Pydantic v2 models for Order Manager contracts (generated from JSON Schema)"
 readme = "README.md"
 license = "LicenseRef-Proprietary"
@@ -17,6 +17,7 @@ dependencies = [
 dev = [
   "datamodel-code-generator>=0.30",
   "mypy>=1.14",
+  "pyyaml>=6.0",
   "ruff>=0.9",
 ]
 

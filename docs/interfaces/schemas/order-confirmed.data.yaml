@@ -1,0 +1,21 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+$id: OrderConfirmedData
+description: Payload for com.ordermanager.order.confirmed.v1
+type: object
+additionalProperties: false
+properties:
+  order_id:
+    $ref: ./primitives/order-id.yaml
+  payment_id:
+    $ref: ./primitives/payment-id.yaml
+  confirmed_amount:
+    type: number
+    minimum: 0
+  confirmed_at:
+    type: string
+    format: date-time
+required:
+  - order_id
+  - payment_id
+  - confirmed_amount
+  - confirmed_at

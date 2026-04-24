@@ -5,16 +5,15 @@ type: object
 additionalProperties: false
 properties:
   order_id:
-    type: string
-    pattern: ^ORD-[A-Z0-9]{8}$
+    $ref: ./primitives/order-id.yaml
   customer_id:
-    type: string
-    format: uuid
+    $ref: ./primitives/customer-id.yaml
   items:
     type: array
     minItems: 1
     items:
       type: object
+      title: OrderItem
       additionalProperties: false
       properties:
         product_id:
