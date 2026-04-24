@@ -1,7 +1,7 @@
 asyncapi: 3.1.0
 info:
   title: Order Manager platform events
-  version: 0.1.0
+  version: 0.1.1
   description: >
     NATS JetStream catalog for the Order Manager platform.
     Per-service channel definitions are in separate files and bundled
