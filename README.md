@@ -152,22 +152,22 @@ If this repository is outdated or inconsistent:
    pnpm check:python
    ```
 
-3. **Validate contracts quickly**:
+3. **Validate contracts quickly** (lint + TS codegen + TS build):
 
    ```bash
-   pnpm check       # lint + TS codegen + TS build
+   pnpm check
    ```
 
 4. **Run all contract checks** (lint + codegen + build + Python + audit):
 
    ```bash
-   pnpm check:full  # check + check:python + check:audit
+   pnpm check:full
    ```
 
 5. **Regenerate artifacts after schema changes**:
 
    ```bash
-   pnpm generate    # pnpm generate:typescript && pnpm generate:python
+   pnpm generate
    ```
 
 ## For Developers
