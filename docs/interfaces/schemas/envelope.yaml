@@ -14,8 +14,10 @@ properties:
     description: URI identifying the event producer
   type:
     type: string
-    pattern: ^com\.ordermanager\.[a-z]+\.[a-z]+\.v\d+$
-    description: Event type — com.ordermanager.{domain}.{event}.v{n}
+    pattern: ^com\.ordermanager\.[a-z]+(\.[a-z]+)+\.v\d+$
+    description: >-
+      Event type — com.ordermanager.{domain}.{event}.v{n}. The {event} segment
+      may itself contain dots for hierarchical names (e.g. saga.step.completed).
   time:
     type: string
     format: date-time

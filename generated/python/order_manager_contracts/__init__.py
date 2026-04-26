@@ -28,7 +28,7 @@ from .generated.shipment_id import ShipmentId
 from .generated.shipment_requested_data import ShipmentRequestedData
 from .nats import CONSUMERS, EVENT_TYPES, STREAMS, SUBJECTS, WILDCARDS
 
-__version__ = "0.1.1"
+__version__ = "0.1.2"
 
 __all__ = [
     "CONSUMERS",

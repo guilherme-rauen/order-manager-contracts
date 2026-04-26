@@ -15,8 +15,8 @@ class Envelope(BaseModel):
     type: Annotated[
         str,
         Field(
-            description='Event type — com.ordermanager.{domain}.{event}.v{n}',
-            pattern='^com\\.ordermanager\\.[a-z]+\\.[a-z]+\\.v\\d+$',
+            description='Event type — com.ordermanager.{domain}.{event}.v{n}. The {event} segment may itself contain dots for hierarchical names (e.g. saga.step.completed).',
+            pattern='^com\\.ordermanager\\.[a-z]+(\\.[a-z]+)+\\.v\\d+$',
         ),
     ]
     time: AwareDatetime

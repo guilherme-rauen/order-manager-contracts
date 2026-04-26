@@ -1,6 +1,6 @@
 {
   "name": "@guilherme-rauen/order-manager-contracts",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "TypeScript types and Zod validators for Order Manager contracts (generated from JSON Schema)",
   "license": "UNLICENSED",
   "type": "module",

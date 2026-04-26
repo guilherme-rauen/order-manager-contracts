@@ -5,7 +5,7 @@
  * Run `pnpm generate:typescript` to regenerate from JSON Schema sources.
  */
 
-export const CONTRACTS_VERSION = '0.1.1' as const;
+export const CONTRACTS_VERSION = '0.1.2' as const;
 
 // CloudEvents envelope
 export { envelopeSchema, type Envelope } from './generated/envelope.zod.js';
