@@ -1,0 +1,30 @@
+branches:
+  - main
+
+tagFormat: v${version}
+
+plugins:
+  - '@semantic-release/commit-analyzer'
+  - '@semantic-release/release-notes-generator'
+  - - '@semantic-release/exec'
+    - prepareCmd: |
+        set -eu
+        V="${nextRelease.version}"
+        sed -i -E "s/^version = \".*\"/version = \"${V}\"/" generated/python/pyproject.toml
+        sed -i -E "s/^__version__ = \".*\"/__version__ = \"${V}\"/" generated/python/order_manager_contracts/__init__.py
+        sed -i -E "s/^  version: .*/  version: ${V}/" docs/interfaces/events/asyncapi.yaml
+        sed -i -E "s/CONTRACTS_VERSION = '.*'/CONTRACTS_VERSION = '${V}'/" generated/typescript/src/index.ts
+        pnpm generate:typescript
+        pnpm build
+  - - '@semantic-release/npm'
+    - pkgRoot: generated/typescript
+      npmPublish: true
+  - - '@semantic-release/git'
+    - assets:
+        - generated/typescript/package.json
+        - generated/python/pyproject.toml
+        - generated/python/order_manager_contracts/__init__.py
+        - docs/interfaces/events/asyncapi.yaml
+        - generated/typescript/src/index.ts
+      message: "chore(release): ${nextRelease.version} [skip ci]\n\n${nextRelease.notes}"
+  - '@semantic-release/github'

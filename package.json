@@ -20,7 +20,8 @@
     "generate:python": "python3 scripts/generate-python.py",
     "generate:typescript": "tsx scripts/generate-typescript.ts",
     "lint": "eslint scripts/ && pnpm bundle:asyncapi && spectral lint docs/interfaces/events/final-asyncapi.yaml",
-    "prepare": "husky"
+    "prepare": "husky",
+    "release": "semantic-release"
   },
   "devDependencies": {
     "@apidevtools/json-schema-ref-parser": "^15.3.5",
@@ -35,6 +36,9 @@
     "husky": "^9.1.0",
     "json-schema-to-zod": "^2.8.1",
     "prettier": "^3.5.0",
+    "semantic-release": "^24.2.0",
+    "@semantic-release/exec": "^6.0.3",
+    "@semantic-release/git": "^10.0.1",
     "tsx": "^4.21.0",
     "typescript": "^5.9.3",
     "typescript-eslint": "^8.33.0",
