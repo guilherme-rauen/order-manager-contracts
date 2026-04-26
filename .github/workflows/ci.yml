@@ -89,14 +89,14 @@ jobs:
     needs: [generate-and-build, verify-python, security]
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     permissions:
-      contents: write # Tag + commit the version bump back to main
-      packages: write # Publish to GitHub Packages (npm)
-      issues: write # semantic-release comments on fixed issues
-      pull-requests: write # semantic-release comments on released PRs
+      contents: write
+      packages: write
+      issues: write
+      pull-requests: write
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 0 # Full history so commit-analyzer sees all commits since last tag
+          fetch-depth: 0
           persist-credentials: true
       - uses: pnpm/action-setup@v4
       - uses: actions/setup-node@v4

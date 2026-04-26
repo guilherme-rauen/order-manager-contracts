@@ -9,11 +9,10 @@ plugins:
   - - '@semantic-release/exec'
     - prepareCmd: |
         set -eu
-        V="${nextRelease.version}"
-        sed -i -E "s/^version = \".*\"/version = \"${V}\"/" generated/python/pyproject.toml
-        sed -i -E "s/^__version__ = \".*\"/__version__ = \"${V}\"/" generated/python/order_manager_contracts/__init__.py
-        sed -i -E "s/^  version: .*/  version: ${V}/" docs/interfaces/events/asyncapi.yaml
-        sed -i -E "s/CONTRACTS_VERSION = '.*'/CONTRACTS_VERSION = '${V}'/" generated/typescript/src/index.ts
+        sed -i -E "s/^version = \".*\"/version = \"${nextRelease.version}\"/" generated/python/pyproject.toml
+        sed -i -E "s/^__version__ = \".*\"/__version__ = \"${nextRelease.version}\"/" generated/python/order_manager_contracts/__init__.py
+        sed -i -E "s/^  version: .*/  version: ${nextRelease.version}/" docs/interfaces/events/asyncapi.yaml
+        sed -i -E "s/CONTRACTS_VERSION = '.*'/CONTRACTS_VERSION = '${nextRelease.version}'/" generated/typescript/src/index.ts
         pnpm generate:typescript
         pnpm build
   - - '@semantic-release/npm'
